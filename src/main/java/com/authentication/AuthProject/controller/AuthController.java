@@ -1,7 +1,7 @@
 package com.authentication.AuthProject.controller;
 
-import com.authentication.AuthProject.dto.LoginRequest;
-import com.authentication.AuthProject.dto.SignupRequest;
+import com.authentication.AuthProject.dto.request.LoginRequest;
+import com.authentication.AuthProject.dto.request.SignupRequest;
 import com.authentication.AuthProject.service.AuthService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -1,4 +1,4 @@
-package com.authentication.AuthProject.dto;
+package com.authentication.AuthProject.dto.request;
 
 
 

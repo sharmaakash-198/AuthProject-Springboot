@@ -1,7 +1,7 @@
 package com.authentication.AuthProject.controller;
 
-import com.authentication.AuthProject.dto.ChangePasswordRequest;
-import com.authentication.AuthProject.dto.UpdateProfileRequest;
+import com.authentication.AuthProject.dto.request.ChangePasswordRequest;
+import com.authentication.AuthProject.dto.request.UpdateProfileRequest;
 import com.authentication.AuthProject.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

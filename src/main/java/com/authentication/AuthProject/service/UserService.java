@@ -1,8 +1,8 @@
 package com.authentication.AuthProject.service;
 
-import com.authentication.AuthProject.dto.ChangePasswordRequest;
-import com.authentication.AuthProject.dto.UpdateProfileRequest;
-import com.authentication.AuthProject.dto.UserResponse;
+import com.authentication.AuthProject.dto.request.ChangePasswordRequest;
+import com.authentication.AuthProject.dto.request.UpdateProfileRequest;
+import com.authentication.AuthProject.dto.response.UserResponse;
 import com.authentication.AuthProject.entity.User;
 import com.authentication.AuthProject.repository.UserRepository;
 import com.authentication.AuthProject.util.AgeCalculator;
