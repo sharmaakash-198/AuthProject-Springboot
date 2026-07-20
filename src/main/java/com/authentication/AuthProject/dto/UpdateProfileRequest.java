@@ -4,33 +4,16 @@ import com.authentication.AuthProject.entity.Gender;
 
 import java.time.LocalDate;
 
-public class SignupRequest {
+public class UpdateProfileRequest {
 
     private String firstName;
     private String lastName;
     private LocalDate dob;
     private Gender gender;
-    private String email;
     private String phoneNumber;
-    private String password;
 
+    public UpdateProfileRequest() {
 
-    //check for constructor
-    public SignupRequest() {
-    }
-
-    public boolean hasMissingFields() {
-        return isBlank(firstName)
-                || isBlank(lastName)
-                || dob == null
-                || gender == null
-                || isBlank(email)
-                || isBlank(phoneNumber)
-                || isBlank(password);
-    }
-
-    private boolean isBlank(String value) {
-        return value == null || value.trim().isEmpty();
     }
 
     public String getFirstName() {
@@ -65,27 +48,11 @@ public class SignupRequest {
         this.gender = gender;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

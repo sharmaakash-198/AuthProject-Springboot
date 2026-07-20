@@ -1,71 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 
     <title>Signup</title>
-    <link rel="stylesheet" href="/css/style.css">
+
+    <link rel="stylesheet" href="/style.css">
 
 </head>
+
 <body>
+
 <div class="container">
 
     <h1>Create Account</h1>
-    <form id="signupForm">
 
-        <input type="text" id="fullName" placeholder="Full Name" required>
+    <p class="message" th:if="${message}" th:text="${message}"></p>
+    <p class="error" th:if="${error}" th:text="${error}"></p>
 
-        <input type="email" id="email" placeholder="Email" required>
+    <form action="/signup" method="post">
 
-        <input type="password" id="password" placeholder="Password" required>
+        <input
+                type="text"
+                name="firstName"
+                placeholder="First Name"
+                required>
 
-        <button>Sign Up</button>
+        <input
+                type="text"
+                name="lastName"
+                placeholder="Last Name"
+                required>
+
+        <label for="dob">Date of Birth (DOB)</label>
+        <input
+                type="date"
+                id="dob"
+                name="dob"
+                required>
+
+        <select name="gender" required>
+
+            <option value="">Select Gender</option>
+
+            <option value="MALE">Male</option>
+
+            <option value="FEMALE">Female</option>
+
+            <option value="OTHER">Other</option>
+
+        </select>
+
+        <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                required>
+
+        <input
+                type="text"
+                name="phoneNumber"
+                placeholder="Phone Number"
+                required>
+
+        <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                required>
+
+        <button type="submit">
+
+            Sign Up
+
+        </button>
 
     </form>
-    <p id="message"></p>
 
     <p>
+
         Already have an account?
+
         <a href="/login">Login</a>
+
     </p>
 
 </div>
 
-<script>
-
-    const form = document.getElementById("signupForm");
-
-    form.addEventListener("submit", async (e) => {
-
-        e.preventDefault();
-
-        const response = await fetch("/signup", {
-
-            method: "POST",
-
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-
-                fullName: fullName.value,
-
-                email: email.value,
-
-                password: password.value
-
-            })
-
-        });
-
-        const result = await response.text();
-
-        document.getElementById("message").innerText = result;
-
-    });
-
-</script>
-
 </body>
-
 </html>

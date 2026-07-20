@@ -5,6 +5,9 @@ public class LoginRequest {
     private String email;
     private String password;
 
+
+    //Use getter-setter annotations
+
     public LoginRequest() {
     }
 
