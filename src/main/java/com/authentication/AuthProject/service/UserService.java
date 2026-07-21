@@ -4,94 +4,97 @@ import com.authentication.AuthProject.dto.request.ChangePasswordRequest;
 import com.authentication.AuthProject.dto.request.UpdateProfileRequest;
 import com.authentication.AuthProject.dto.response.UserResponse;
 import com.authentication.AuthProject.entity.User;
+import com.authentication.AuthProject.exception.BadRequestException;
+import com.authentication.AuthProject.exception.DuplicateResourceException;
+import com.authentication.AuthProject.exception.InvalidCredentialsException;
+import com.authentication.AuthProject.exception.ResourceNotFoundException;
 import com.authentication.AuthProject.repository.UserRepository;
 import com.authentication.AuthProject.util.AgeCalculator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository repository;
 
-    public UserService(UserRepository repository) {
-        this.repository = repository;
+    public UserResponse getUser(Long id) {
+
+        User user = repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found."));
+
+        return toResponse(user);
     }
 
-    public Optional<UserResponse> getUser(Long id) {
-        return repository.findById(id).map(this::toResponse);
-    }
+    @Transactional
+    public UserResponse updateUser(Long id, UpdateProfileRequest request) {
 
-    public Optional<String> updateUser(Long id, UpdateProfileRequest request) {
-        Optional<User> userOptional = repository.findById(id);
+        User user = repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found."));
 
-        if (userOptional.isEmpty()) {
-            return Optional.of("User not found.");
+        String newPhone = request.getPhoneNumber();
+
+        if (!user.getPhoneNumber().equals(newPhone)
+                && repository.existsByPhoneNumber(newPhone)) {
+
+            throw new DuplicateResourceException(
+                    "Phone number already registered.");
         }
 
-        User user = userOptional.get();
-
-        //NEed to be checked  ...!!!!!!!!!!!!!!1
-
-        if (!user.getPhoneNumber().equals(request.getPhoneNumber())
-                && repository.findByPhoneNumber(request.getPhoneNumber()).isPresent()) {
-            return Optional.of("Phone number already registered.");
-        }
+        user.setPhoneNumber(newPhone);
 
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setDob(request.getDob());
         user.setGender(request.getGender());
-        user.setPhoneNumber(request.getPhoneNumber());
+        user.setPhoneNumber(newPhone);
 
-        repository.save(user);
-
-        //auto update the age accordingly
-
-
-        return Optional.empty();
+        return toResponse(user);
     }
 
-    public Optional<String> changePassword(Long id, ChangePasswordRequest request) {
-        Optional<User> userOptional = repository.findById(id);
+    @Transactional
+    public void changePassword(Long id, ChangePasswordRequest request) {
 
-        if (userOptional.isEmpty()) {
-            return Optional.of("User not found.");
-        }
-
-        User user = userOptional.get();
+        User user = repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found."));
 
         if (!user.getPassword().equals(request.getCurrentPassword())) {
-            return Optional.of("Current password is incorrect.");
+            throw new InvalidCredentialsException(
+                    "Current password is incorrect.");
         }
 
         if (!request.getNewPassword().equals(request.getConfirmPassword())) {
-            return Optional.of("New password and confirm password do not match.");
+            throw new BadRequestException(
+                    "New password and confirm password do not match.");
         }
 
-        user.setPassword(request.getNewPassword());
-
+        if (request.getCurrentPassword().equals(request.getNewPassword())) {
+            throw new BadRequestException(
+                    "New password must be different from current password.");
+        }
         //use sql query for updation
 
-        repository.save(user);
-
-        return Optional.empty();
+        user.setPassword(request.getNewPassword());
     }
 
     private UserResponse toResponse(User user) {
-        UserResponse response = new UserResponse();
 
-        response.setId(user.getId());
-        response.setFirstName(user.getFirstName());
-        response.setLastName(user.getLastName());
-        response.setFullName(user.getFirstName() + " " + user.getLastName());
-        response.setDob(user.getDob());
-        response.setAge(AgeCalculator.calculate(user.getDob()));
-        response.setGender(user.getGender());
-        response.setEmail(user.getEmail());
-        response.setPhoneNumber(user.getPhoneNumber());
-
-        return response;
+        return UserResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .fullName(user.getFirstName() + " " + user.getLastName())
+                .dob(user.getDob())
+                .age(AgeCalculator.calculate(user.getDob()))
+                .gender(user.getGender())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .build();
     }
 }
