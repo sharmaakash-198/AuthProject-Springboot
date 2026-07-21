@@ -1,6 +1,7 @@
 package com.authentication.AuthProject.dto.request;
 
 import com.authentication.AuthProject.entity.Gender;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -31,6 +32,7 @@ public class SignupRequest {
     @NotNull(message = "Gender is required")
     private Gender gender;
 
+    @Email
     @NotBlank(message = "Email is required")
     private String email;
 
