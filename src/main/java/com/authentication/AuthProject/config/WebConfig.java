@@ -1,0 +1,17 @@
+package com.authentication.AuthProject.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addRedirectViewController("/", "/login.html");
+        registry.addRedirectViewController("/login", "/login.html");
+        registry.addRedirectViewController("/signup", "/signup.html");
+        registry.addRedirectViewController("/home", "/home.html");
+    }
+}
