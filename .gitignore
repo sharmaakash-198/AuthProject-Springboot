@@ -1,3 +1,6 @@
 .cursor/
 Plan .md
 frontend/node_modules/
+
+backend/.env
+.env
