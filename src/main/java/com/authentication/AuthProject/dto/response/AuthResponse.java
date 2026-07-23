@@ -12,3 +12,6 @@ public class LoginResponse {
     private Long userId;
     private String message;
 }
+
+
+//reuse the response

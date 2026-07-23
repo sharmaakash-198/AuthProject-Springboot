@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SignupResponse {
+public class AuthResponse {
 
     private Long userId;
     private String message;
