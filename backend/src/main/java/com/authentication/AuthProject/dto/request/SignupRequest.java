@@ -1,15 +1,10 @@
 package com.authentication.AuthProject.dto.request;
 
 import com.authentication.AuthProject.enums.Gender;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDate;
-
-//Used Jakarta Validation Library
 
 @Getter
 @Setter
@@ -36,6 +31,10 @@ public class SignupRequest {
     @NotBlank(message = "Email is required")
     private String email;
 
+    @Pattern(
+            regexp = "^[6-9]\\d{9}$",
+            message = "Phone number must be a valid 10-digit Indian mobile number"
+    )
     @NotBlank(message = "Phone number is required")
     private String phoneNumber;
 

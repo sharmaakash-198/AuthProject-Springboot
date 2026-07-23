@@ -8,6 +8,7 @@ import lombok.*;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.Period;
 
 @Entity
 @Table(name = "users")
@@ -45,24 +46,25 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private Integer age;
+
     @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
-    @Column(nullable = false)
     private Instant updatedAt;
 
-    //Instant(utc) vs localdatetime
 
     @PrePersist
     public void prePersist() {
         Instant now = Instant.now();
         createdAt = now;
-//        updatedAt = now;                    update at will be null at first time
-
+        age = Period.between(dob, LocalDate.now()).getYears();
     }
 
     @PreUpdate
     public void preUpdate() {
         updatedAt = Instant.now();
+        age = Period.between(dob, LocalDate.now()).getYears();
     }
 }
