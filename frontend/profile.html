@@ -50,8 +50,7 @@
 <script src="/js/config.js"></script>
 <script src="/js/api.js"></script>
 <script>
-    const params = new URLSearchParams(window.location.search);
-    const userId = params.get('id') || requireAuth();
+    const userId = resolveAuthenticatedUserId();
 
     if (!userId) {
         throw new Error('Missing user id');

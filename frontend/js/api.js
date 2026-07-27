@@ -21,6 +21,22 @@ function requireAuth() {
     return userId;
 }
 
+function resolveAuthenticatedUserId() {
+    const userId = requireAuth();
+    if (!userId) {
+        return null;
+    }
+
+    const urlId = new URLSearchParams(window.location.search).get('id');
+    if (urlId && urlId !== userId) {
+        const path = window.location.pathname;
+        window.location.replace(`${path}?id=${encodeURIComponent(userId)}`);
+        return null;
+    }
+
+    return userId;
+}
+
 async function apiRequest(url, options = {}) {
     const response = await fetch(API_BASE + url, {
         headers: {

@@ -17,8 +17,8 @@
         <label for="firstName">First Name <span class="required">*</span></label>
         <input type="text" id="firstName" name="firstName" required>
 
-        <label for="lastName">Last Name <span class="required">*</span></label>
-        <input type="text" id="lastName" name="lastName" required>
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" name="lastName">
 
         <label for="dob">Date of Birth <span class="required">*</span></label>
         <input type="date" id="dob" name="dob" required>
@@ -41,9 +41,9 @@
 
 <script src="/js/config.js"></script>
 <script src="/js/api.js"></script>
+<script src="/js/validation.js"></script>
 <script>
-    const params = new URLSearchParams(window.location.search);
-    const userId = params.get('id') || requireAuth();
+    const userId = resolveAuthenticatedUserId();
 
     if (!userId) {
         throw new Error('Missing user id');
@@ -78,6 +78,12 @@
             gender: document.getElementById('gender').value,
             phoneNumber: document.getElementById('phoneNumber').value.trim()
         };
+
+        const validationError = validateUpdateProfileForm(payload);
+        if (validationError) {
+            showMessage('error', validationError, true);
+            return;
+        }
 
         try {
             await apiRequest(`/api/users/${userId}`, {
